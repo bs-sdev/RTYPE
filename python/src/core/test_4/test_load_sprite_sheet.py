@@ -118,16 +118,22 @@ class Ship:
             else:
                 self.fly_count = 1
 
-        # elif fire:
-        #     window.blit(beam[fire_count], (x + 50, y))
-        #
-        #     if fire_count < 3:
-        #         fire_count += 1
-        #     else:
-        #         fire_count = 3
-
         else:
             win.blit(char, (self.x, self.y))
+
+
+class Projectile:
+
+    def __init__(self, x, y, radius, color):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.color = color
+        self.facing = 1
+        self.vel = 8 * self.facing
+
+    def draw(self, win):
+        pg.draw.circle(win, self.color, (self.x, self.y), self.radius, 1)
 
 
 def redraw_game_window(ship):
@@ -136,12 +142,16 @@ def redraw_game_window(ship):
 
     ship.draw(win=window)
 
+    for bullet in bullets:
+        bullet.draw(window)
+
     pg.display.update()
 
 
 # Main Loop
 run = True
 ship = Ship(x=250, y=250, width=32, height=15)
+bullets = []
 
 while run:
     clock.tick(30)
@@ -151,7 +161,17 @@ while run:
         if event.type == pg.QUIT:
             run = False
 
+    for bullet in bullets:
+        if 500 > bullet.x > 0:
+            bullet.x += bullet.vel
+        else:
+            bullets.pop(bullets.index(bullet))
+
     keys = pg.key.get_pressed()
+
+    if keys[pg.K_SPACE]:
+        if len(bullets) < 5:
+            bullets.append(Projectile(round(ship.x + ship.width // 2), round(ship.y + ship.height // 2), 6, (255, 255, 255), ))
 
     if keys[pg.K_LEFT] and ship.x > ship.vel:
         ship.x -= ship.vel
