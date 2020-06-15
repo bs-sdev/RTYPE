@@ -1,3 +1,1 @@
-pbr
-connexion
-python-etcd
+pygame==1.9.6
