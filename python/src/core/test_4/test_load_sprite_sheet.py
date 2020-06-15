@@ -2,7 +2,7 @@ import os
 
 import pygame as pg
 
-from python.src.core.test_3.spritesheet import SpriteSheet
+from python.src.core.test_4.spritesheet import SpriteSheet
 
 pg.init()
 
